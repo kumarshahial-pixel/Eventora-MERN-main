@@ -10,7 +10,6 @@ const {
     expirePaymentHolds
 } = require('../utils/paymentGateway');
 const generateTicketPdf = require('../utils/ticketPdf');
-const verifyTurnstileToken = require('../utils/turnstile');
 const {
     normalizeSlotDate,
     slotDateKey,
@@ -141,9 +140,6 @@ exports.bookEvent = async (req, res) => {
     let reservedSlotDate = null;
     let reservedSeatCount = 0;
     try {
-        if (!await verifyTurnstileToken(req.body.captchaToken)) {
-            return res.status(400).json({ message: 'Please complete the CAPTCHA verification and try again.' });
-        }
         await expirePaymentHolds();
         const { eventId, paymentMethod, seatType } = req.body;
 
@@ -247,9 +243,6 @@ exports.createPaymentOrder = async (req, res) => {
     let reservedSeatCount = 0;
     let reservedSlotDate = null;
     try {
-        if (!await verifyTurnstileToken(req.body.captchaToken)) {
-            return res.status(400).json({ message: 'Please complete the CAPTCHA verification and try again.' });
-        }
         await expirePaymentHolds();
         const { eventId, seatType } = req.body;
         const event = await Event.findById(eventId);
@@ -340,9 +333,6 @@ exports.createUpiQrPayment = async (req, res) => {
     let reservedSeatCount = 0;
     let reservedSlotDate = null;
     try {
-        if (!await verifyTurnstileToken(req.body.captchaToken)) {
-            return res.status(400).json({ message: 'Please complete the CAPTCHA verification and try again.' });
-        }
         await expirePaymentHolds();
         const { eventId, seatType } = req.body;
         const event = await Event.findById(eventId);

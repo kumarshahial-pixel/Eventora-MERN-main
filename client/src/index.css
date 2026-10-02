@@ -1750,26 +1750,6 @@ textarea:focus-visible {
   .eventora-review-guests span:first-child { min-width: 0; overflow-wrap: anywhere; font-weight: 700; }
   .eventora-review-guests span:last-child { flex: 0 0 auto; }
 
-  .eventora-captcha {
-    display: grid;
-    justify-items: center;
-    gap: 0.35rem;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border: 1px solid #e3ebe8;
-    border-radius: 0.6rem;
-    background: #f8fbfa;
-  }
-
-  .eventora-captcha p {
-    margin: 0;
-    color: #647572;
-    font-size: 0.68rem;
-    text-align: center;
-  }
-
-  .eventora-turnstile-widget { max-width: 100%; min-height: 65px; }
-
   .eventora-review-total { margin-top: 0.8rem; }
 
   .eventora-review-actions {

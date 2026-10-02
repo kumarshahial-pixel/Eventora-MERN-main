@@ -15,7 +15,6 @@ import {
     FaMoneyBillWave
 } from 'react-icons/fa';
 import { AuthContext } from '../context/AuthContext';
-import TurnstileCaptcha from '../components/TurnstileCaptcha';
 import api from '../utils/axios';
 
 const loadRazorpayCheckout = () => new Promise((resolve) => {
@@ -86,7 +85,6 @@ const BookingPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
-    const [captchaToken, setCaptchaToken] = useState('');
     const [event, setEvent] = useState(null);
     const [selectedSlotDate, setSelectedSlotDate] = useState('');
     const [bookedSeats, setBookedSeats] = useState([]);
@@ -253,7 +251,6 @@ const BookingPage = () => {
         }
         setError('');
         setUpiQrPayment(null);
-        setCaptchaToken('');
         setShowReview(true);
     };
 
@@ -286,10 +283,6 @@ const BookingPage = () => {
     };
 
     const handleConfirmBooking = async () => {
-        if (!captchaToken) {
-            setError('Complete the CAPTCHA verification before confirming your booking.');
-            return;
-        }
         setBookingLoading(true);
         setError('');
         setSuccessMsg('');
@@ -299,7 +292,6 @@ const BookingPage = () => {
             const bookingPayload = {
                 eventId: event._id,
                 slotDate: selectedSlotDate,
-                captchaToken,
                 selectedSeats,
                 seatType: selectedSeatType || undefined,
                 seatTypeDetails: selectedSeatDetails,
@@ -724,10 +716,6 @@ const BookingPage = () => {
                                     return <div key={seat}><span>Seat {seat}: {attendee?.name}</span><span>{attendee?.gender} · Age {attendee?.age}</span></div>;
                                 })}
                             </div>
-                            <div className="eventora-captcha">
-                                <TurnstileCaptcha onToken={setCaptchaToken} />
-                                <p>Complete this security check to confirm your booking.</p>
-                            </div>
                             <div className="eventora-review-total"><span>Total</span><strong>{total === 0 ? 'Free' : `₹${total}`}</strong></div>
                         </div>
                         <div className="eventora-review-actions">
@@ -736,7 +724,7 @@ const BookingPage = () => {
                                 type="button"
                                 className="eventora-review-confirm"
                                 onClick={paymentChoice === 'upi_qr' && upiQrPayment ? handleVerifyUpiPayment : handleConfirmBooking}
-                                disabled={bookingLoading || !captchaToken}
+                                disabled={bookingLoading}
                             >
                                 {bookingLoading
                                     ? 'Processing...'
